@@ -6,7 +6,7 @@
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
 //
-//  Permission is granted to anyone to use this software for any purpose,including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+//  Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
 //
 //  - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
 //  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
@@ -282,33 +282,33 @@
 
         let skSignature = try secKeySign(messageToSign.bytes, variant: .rsaSignatureMessagePKCS1v15SHA256, withKey: rsaSecKey)
 
-        XCTAssertEqual(csSignature, skSignature.bytes, "Signatures don't match!")
+        XCTAssertEqual(csSignature, skSignature.byteArray, "Signatures don't match!")
 
         // Ensure we can verify each signature using the opposite library
-        XCTAssertTrue(try rsaCryptoSwift.verify(signature: skSignature.bytes, for: messageToSign.bytes, variant: .message_pkcs1v15_SHA256))
+        XCTAssertTrue(try rsaCryptoSwift.verify(signature: skSignature.byteArray, for: messageToSign.bytes, variant: .message_pkcs1v15_SHA256))
         XCTAssertTrue(try self.secKeyVerify(csSignature, forBytes: messageToSign.bytes, usingVariant: .rsaSignatureMessagePKCS1v15SHA256, withKey: rsaSecKey))
 
         // Encrypt with SecKey
         let skEncryption = try secKeyEncrypt(messageToSign.bytes, usingVariant: .rsaEncryptionRaw, withKey: rsaSecKey)
         // Decrypt with CryptoSwift Key
-        XCTAssertEqual(try rsaCryptoSwift.decrypt(skEncryption.bytes, variant: .raw), messageToSign.bytes, "CryptoSwift Decryption of SecKey Encryption Failed")
+        XCTAssertEqual(try rsaCryptoSwift.decrypt(skEncryption.byteArray, variant: .raw), messageToSign.bytes, "CryptoSwift Decryption of SecKey Encryption Failed")
 
         // Encrypt with CryptoSwift
         let csEncryption = try rsaCryptoSwift.encrypt(messageToSign.bytes, variant: .raw)
         // Decrypt with SecKey
-        XCTAssertEqual(try self.secKeyDecrypt(csEncryption, usingVariant: .rsaEncryptionRaw, withKey: rsaSecKey).bytes, messageToSign.bytes, "SecKey Decryption of CryptoSwift Encryption Failed")
+        XCTAssertEqual(try self.secKeyDecrypt(csEncryption, usingVariant: .rsaEncryptionRaw, withKey: rsaSecKey).byteArray, messageToSign.bytes, "SecKey Decryption of CryptoSwift Encryption Failed")
 
-        XCTAssertEqual(csEncryption, skEncryption.bytes, "Encrypted Data Does Not Match")
+        XCTAssertEqual(csEncryption, skEncryption.byteArray, "Encrypted Data Does Not Match")
 
         // Encrypt with SecKey
         let skEncryption2 = try secKeyEncrypt(messageToSign.bytes, usingVariant: .rsaEncryptionPKCS1, withKey: rsaSecKey)
         // Decrypt with CryptoSwift Key
-        XCTAssertEqual(try rsaCryptoSwift.decrypt(skEncryption2.bytes, variant: .pksc1v15), messageToSign.bytes, "CryptoSwift Decryption of SecKey Encryption Failed")
+        XCTAssertEqual(try rsaCryptoSwift.decrypt(skEncryption2.byteArray, variant: .pksc1v15), messageToSign.bytes, "CryptoSwift Decryption of SecKey Encryption Failed")
 
         // Encrypt with CryptoSwift
         let csEncryption2 = try rsaCryptoSwift.encrypt(messageToSign.bytes, variant: .pksc1v15)
         // Decrypt with SecKey
-        XCTAssertEqual(try self.secKeyDecrypt(csEncryption2, usingVariant: .rsaEncryptionPKCS1, withKey: rsaSecKey).bytes, messageToSign.bytes, "SecKey Decryption of CryptoSwift Encryption Failed")
+        XCTAssertEqual(try self.secKeyDecrypt(csEncryption2, usingVariant: .rsaEncryptionPKCS1, withKey: rsaSecKey).byteArray, messageToSign.bytes, "SecKey Decryption of CryptoSwift Encryption Failed")
       }
     }
 
@@ -493,7 +493,7 @@
     )
     """
 
-    private func initSecKey(rawRepresentation unsafe: Data) throws -> SecKey {
+    private func initSecKey(rawRepresentation rawKey: Data) throws -> SecKey {
       let attributes: [String: Any] = [
         kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
         kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
@@ -502,7 +502,7 @@
       ]
 
       var error: Unmanaged<CFError>?
-      guard let secKey = SecKeyCreateWithData(unsafe as CFData, attributes as CFDictionary, &error) else {
+      guard let secKey = SecKeyCreateWithData(rawKey as CFData, attributes as CFDictionary, &error) else {
         throw NSError(domain: "Error constructing SecKey from raw key data: \(error.debugDescription)", code: 0, userInfo: nil)
       }
 

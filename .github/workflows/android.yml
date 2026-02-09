@@ -1,4 +1,4 @@
-name: Linux
+name: Android
 
 on:
   push:
@@ -17,8 +17,5 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Swift Package Build
-      run: swift build -v
-
     - name: Run tests
-      run: swift test -c release -Xswiftc -enable-testing -Xswiftc -DCI -Xswiftc -Xfrontend -Xswiftc -solver-memory-threshold -Xswiftc -Xfrontend -Xswiftc 999999999
+      uses: skiptools/swift-android-action@v2

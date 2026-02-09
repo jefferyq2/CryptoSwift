@@ -1,9 +1,9 @@
-[![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20Android%20%7CmacOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
+[![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20Android%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
 
-[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0%20%7C%204.1%20%7C%204.2%20%7C%205.0-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
+[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0%20%7C%204.1%20%7C%204.2%20%7C%205.0%20%7C%206.2-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg?style=flat&colorA=28a745&&colorB=4E4E4E)](https://github.com/swiftlang/swift-package-manager)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods&colorA=28a745&&colorB=4E4E4E)](https://cocoapods.org/pods/CryptoSwift)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorA=28a745&&colorB=4E4E4E)](https://github.com/Carthage/Carthage)
+[![CocoaPods Deprecated](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods&colorA=red&&colorB=4E4E4E)](https://cocoapods.org/pods/CryptoSwift)
 
 # CryptoSwift
 
@@ -131,22 +131,12 @@ It is recommended to enable [Whole-Module Optimization](https://swift.org/blog/w
 You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
 
 ```swift
-.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.3")
+.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.9.0")
 ```
 
 See: [Package.swift - manual](https://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
 
 Notice: Swift Package Manager uses debug configuration for debug Xcode build, that may result in significant (up to x10000) worse performance. Performance characteristic is different in Release build. To overcome this problem, consider embed `CryptoSwift.xcframework` described below.
-
-#### CocoaPods
-
-You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
-
-```ruby
-pod 'CryptoSwift', '~> 1.8.3'
-```
-
-Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
 
 #### Carthage
 
@@ -158,6 +148,18 @@ github "krzyzanowskim/CryptoSwift"
 ```
 
 Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started). [Common issues](https://github.com/krzyzanowskim/CryptoSwift/discussions/983#discussioncomment-3669433).
+
+#### CocoaPods
+
+> **Note**: CocoaPods is deprecated and no longer recommended for new projects. Use Swift Package Manager or Carthage instead.
+
+You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
+
+```ruby
+pod 'CryptoSwift', '~> 1.8.4'
+```
+
+Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
 
 #### XCFramework
 
@@ -193,8 +195,9 @@ In the project, you'll find [single scheme](https://mxcl.dev/PromiseKit/news/201
 - Swift 4.0, branch [swift4](https://github.com/krzyzanowskim/CryptoSwift/tree/swift4) version <= 0.12.0
 - Swift 4.2, branch [swift42](https://github.com/krzyzanowskim/CryptoSwift/tree/swift42) version <= 0.15.0
 - Swift 5.0, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift5) version <= 1.2.0
-- Swift 5.1, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift51) version <= 1.3.3
-- Swift 5.3 and newer, branch [main](https://github.com/krzyzanowskim/CryptoSwift/tree/main)
+- Swift 5.1, branch [swift51](https://github.com/krzyzanowskim/CryptoSwift/tree/swift51) version <= 1.3.3
+- Swift 5.3, branch [swift53](https://github.com/krzyzanowskim/CryptoSwift/tree/swift53) version <= 1.8.5
+- Swift 6.2 and newer, branch [main](https://github.com/krzyzanowskim/CryptoSwift/tree/main)
 
 ## How-to
 
@@ -232,7 +235,7 @@ let data = Data([0x01, 0x02, 0x03])
 `Data` to `Array<UInt8>`
 
 ```swift
-let bytes = data.bytes                     // [1,2,3]
+let bytes = data.byteArray                // [1,2,3]
 ```
 
 [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) encoding:
@@ -316,7 +319,7 @@ try CMAC(key: key).authenticate(bytes)
 let password: Array<UInt8> = Array("s33krit".utf8)
 let salt: Array<UInt8> = Array("nacllcan".utf8)
 
-let key = try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, keyLength: 32, variant: .sha256).calculate()
+let key = try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, keyLength: 32, variant: .sha2(.sha256)).calculate()
 ```
 
 ```swift
@@ -405,11 +408,11 @@ let aes = try AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7)
 
 /* Encrypt Data */
 let inputData = Data()
-let encryptedBytes = try aes.encrypt(inputData.bytes)
+let encryptedBytes = try aes.encrypt(inputData.byteArray)
 let encryptedData = Data(encryptedBytes)
 
 /* Decrypt Data */
-let decryptedBytes = try aes.decrypt(encryptedData.bytes)
+let decryptedBytes = try aes.decrypt(encryptedData.byteArray)
 let decryptedData = Data(decryptedBytes)
 ```
 
@@ -656,7 +659,7 @@ let rsaKey = try RSA(rawRepresentation: cfdata as Data)
 
 CryptoSwift is owned and maintained by [Marcin Krzyżanowski](https://www.krzyzanowskim.com)
 
-You can follow me on Twitter at [@krzyzanowskim](https://twitter.com/krzyzanowskim) for project updates and releases.
+You can follow me on Twitter at [@krzyzanowskim](https://x.com/krzyzanowskim) for project updates and releases.
 
 # Cryptography Notice
 
@@ -664,7 +667,7 @@ This distribution includes cryptographic software. The country in which you curr
 
 ## License
 
-Copyright (C) 2014-2022 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+Copyright (C) 2014-2025 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 This software is provided 'as-is', without any express or implied warranty.
 
 In no event will the authors be held liable for any damages arising from the use of this software.

@@ -6,7 +6,7 @@
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
 //
-//  Permission is granted to anyone to use this software for any purpose,including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+//  Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
 //
 //  - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
 //  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
@@ -140,8 +140,8 @@ final class ASN1Tests: XCTestCase {
   /// This tests decodes an RSA Public Key from a Base64 DER Encoded representation
   ///
   /// This test enforces that
-  /// 1) The decoding process yeilds the expected format.
-  /// 2) The re-encoding of the data yeilds the exact same starting data.
+  /// 1) The decoding process yields the expected format.
+  /// 2) The re-encoding of the data yields the exact same starting data.
   func testANS1DERDecodingPublicKey() throws {
     /// An example of an RSA Public Key ASN1 DER Encoding
     ///
@@ -204,15 +204,15 @@ final class ASN1Tests: XCTestCase {
 
     // Ensure the re-encoded data matches the original exactly
     XCTAssertEqual(Data(encoded), publicDERData)
-    XCTAssertEqual(encoded, publicDERData.bytes)
+    XCTAssertEqual(encoded, publicDERData.byteArray)
     XCTAssertEqual(encoded.toBase64(), publicDER)
   }
 
   /// This tests decodes an RSA Private Key from a Base64 DER Encoded representation
   ///
   /// This test enforces that
-  /// 1) The decoding process yeilds the expected format.
-  /// 2) The re-encoding of the data yeilds the exact same starting data.
+  /// 1) The decoding process yields the expected format.
+  /// 2) The re-encoding of the data yields the exact same starting data.
   func testANS1DERDecodingPrivateKey() throws {
     /// An example of an RSA Private Key ASN1 DER Encoding
     ///
@@ -310,7 +310,7 @@ final class ASN1Tests: XCTestCase {
     }
     XCTAssertEqual(coefficient, Data(hex: "009c74545364466fe538e67149f41815334669ecc2245cd58120f350d20e5bc3ddd10855297a3cb93370d348b6b803e527c2e4cc42bfa3c852525586791abc48d2"))
 
-    // Ensure re-encoding the data yeilds the exact same starting data
+    // Ensure re-encoding the data yields the exact same starting data
     let asn: ASN1.Node = .sequence(nodes: [
       .integer(data: version),
       .integer(data: n),
@@ -328,15 +328,15 @@ final class ASN1Tests: XCTestCase {
 
     // Ensure the re-encoded data matches the original data exactly
     XCTAssertEqual(Data(encodedData), privateDERData)
-    XCTAssertEqual(encodedData, privateDERData.bytes)
+    XCTAssertEqual(encodedData, privateDERData.byteArray)
     XCTAssertEqual(encodedData.toBase64(), privateDER.replacingOccurrences(of: "\n", with: ""))
   }
 
   /// This tests decodes an Encrypted RSA Private Key from a Base64 PEM Encoded representation
   ///
   /// This test enforces that
-  /// 1) The decoding process yeilds the expected format.
-  /// 2) The re-encoding of the data yeilds the exact same starting data.
+  /// 1) The decoding process yields the expected format.
+  /// 2) The re-encoding of the data yields the exact same starting data.
   func testASN1DecodingEncryptedPEM() throws {
     /// ==========================
     ///  Encrypted PEM Structure
@@ -506,7 +506,7 @@ final class ASN1Tests: XCTestCase {
 
     // Ensure the re-encoded data matches the original data exactly
     XCTAssertEqual(Data(encodedData), pemData)
-    XCTAssertEqual(encodedData, pemData.bytes)
+    XCTAssertEqual(encodedData, pemData.byteArray)
     XCTAssertEqual(encodedData.toBase64(), encryptedPEMFormat.replacingOccurrences(of: "\n", with: ""))
   }
 

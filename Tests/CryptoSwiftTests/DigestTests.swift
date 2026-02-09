@@ -1,12 +1,12 @@
 //
 //  CryptoSwift
 //
-//  Copyright (C) 2014-2022 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright (C) 2014-2025 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
 //
-//  Permission is granted to anyone to use this software for any purpose,including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+//  Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
 //
 //  - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
 //  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
@@ -242,31 +242,31 @@ final class DigestTests: XCTestCase {
       let input = Data(bytes: buf, count: testSize)
 
       // SHA1
-      let sha1Once = SHA1().calculate(for: input.bytes)
+      let sha1Once = SHA1().calculate(for: input.byteArray)
 
       var sha1Partial = SHA1()
       for batch in input.batched(by: 17) {
-        _ = try sha1Partial.update(withBytes: batch.bytes)
+        _ = try sha1Partial.update(withBytes: batch.byteArray)
       }
       let sha1Result = try sha1Partial.finish()
       XCTAssertEqual(sha1Once, sha1Result)
 
       // SHA2
-      let sha2Once = SHA2(variant: .sha224).calculate(for: input.bytes)
+      let sha2Once = SHA2(variant: .sha224).calculate(for: input.byteArray)
 
       var sha2Partial = SHA2(variant: .sha224)
       for batch in input.batched(by: 17) {
-        _ = try sha2Partial.update(withBytes: batch.bytes)
+        _ = try sha2Partial.update(withBytes: batch.byteArray)
       }
       let sha2Result = try sha2Partial.finish()
       XCTAssertEqual(sha2Once, sha2Result)
 
       // SHA3
-      let sha3Once = SHA3(variant: .sha224).calculate(for: input.bytes)
+      let sha3Once = SHA3(variant: .sha224).calculate(for: input.byteArray)
 
       var sha3Partial = SHA3(variant: .sha224)
       for batch in input.batched(by: 17) {
-        _ = try sha3Partial.update(withBytes: batch.bytes)
+        _ = try sha3Partial.update(withBytes: batch.byteArray)
       }
       let sha3Result = try sha3Partial.finish()
       XCTAssertEqual(sha3Once, sha3Result)
